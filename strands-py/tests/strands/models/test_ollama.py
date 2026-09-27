@@ -94,6 +94,13 @@ def test_context_window_limit_unset_without_num_ctx(host, model_id):
     assert model.context_window_limit is None
 
 
+@pytest.mark.parametrize("num_ctx", [0, -1, True, "4096", 4096.0, None])
+def test_context_window_limit_ignores_invalid_num_ctx(host, model_id, num_ctx):
+    model = OllamaModel(host, model_id=model_id, options={"num_ctx": num_ctx})
+
+    assert model.context_window_limit is None
+
+
 def test_context_window_limit_follows_num_ctx_updates(host, model_id):
     model = OllamaModel(host, model_id=model_id, options={"num_ctx": 4096})
 
